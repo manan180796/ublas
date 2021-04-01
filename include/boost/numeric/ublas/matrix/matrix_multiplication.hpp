@@ -1,3 +1,4 @@
+#include <cstddef>
 #if !defined(matrix_multiplication_hpp)
 #define matrix_multiplication_hpp
 
@@ -39,10 +40,17 @@ public:
   matrix<T> eval() const
   {
     auto dimensions = size();
+    matrix<T> left  = this->left.eval();
+    matrix<T> right = this->right.eval();
     matrix<T> result(dimensions);
+    size_t intermediate_axis = std::get<1>(left.size());
     for (size_t i = 0; i < std::get<0>(dimensions); ++i)
-      for (size_t j = 0; j < std::get<1>(dimensions); ++j)
-        result(i, j) = (*this)(i, j);
+      for (size_t j = 0; j < std::get<1>(dimensions); ++j) {
+        result(i, j) = 0;
+        for (size_t k = 0; k < intermediate_axis; ++k) {
+          result(i, j) += left(i, k) * right(k, j);
+        }
+      }
     return result;
   }
 };

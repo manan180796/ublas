@@ -4,8 +4,8 @@
 #include <boost/numeric/ublas/matrix/matrix.hpp>
 #include <functional>
 template <typename T, typename opand_type>
-class unary_expression
-  : public matrix_expression<T, unary_expression<T, opand_type>> {
+class point_unary_expression
+  : public matrix_expression<T, point_unary_expression<T, opand_type>> {
   using op_type        = std::function<T(const opand_type&, size_t, size_t)>;
   using size_calc_type = std::function<std::tuple<size_t, size_t>(
     std::tuple<size_t, size_t>, std::tuple<size_t, size_t>)>;
@@ -14,9 +14,9 @@ class unary_expression
   const size_calc_type size_calc;
 
 public:
-  unary_expression(const opand_type& opand,
-                   const op_type& op,
-                   const size_calc_type& size_calc)
+  point_unary_expression(const opand_type& opand,
+                         const op_type& op,
+                         const size_calc_type& size_calc)
     : opand(opand)
     , op(op)
     , size_calc(size_calc)

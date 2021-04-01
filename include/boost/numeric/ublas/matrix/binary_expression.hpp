@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <iostream>
 #if !defined(binary_expression_hpp)
 #define binary_expression_hpp
 
@@ -42,6 +43,10 @@ public:
   {
     auto dimensions = size();
     matrix<T> result(dimensions);
+    // matrix<T> left  = this->left.eval();
+    // matrix<T> right = this->right.eval();
+    std::cout << "value of left is" << std::endl;
+    std::cout << left(0, 0) << std::endl;
     for (size_t i = 0; i < std::get<0>(dimensions); ++i)
       for (size_t j = 0; j < std::get<1>(dimensions); ++j)
         result(i, j) = op(left(i, j), right(i, j));

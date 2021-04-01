@@ -24,7 +24,7 @@ public:
   {
     return static_cast<const derived_type&>(*this).eval();
   };
-  std::tuple<size_t, size_t> size() const
+  [[nodiscard]] std::tuple<size_t, size_t> size() const
   {
     return static_cast<const derived_type&>(*this).size();
   }
