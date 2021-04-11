@@ -1,3 +1,5 @@
+#include "boost/numeric/ublas/matrix/matrix_expression.hpp"
+#include <iostream>
 #if !defined(matrix_hpp)
 #define matrix_hpp
 
@@ -7,9 +9,11 @@
 #include <ostream>
 #include <tuple>
 #include <cstddef>
-#include <boost/numeric/ublas/matrix/matrix_expression.hpp>
+#include <boost/numeric/ublas/matrix/assignable_matrix.hpp>
+#include <boost/numeric/ublas/matrix/submatrix.hpp>
 
-template <typename T> class matrix : public matrix_expression<T, matrix<T>> {
+template <typename T>
+class matrix : public assignable_expression<T, matrix<T>> {
   std::vector<T> data;
   std::tuple<size_t, size_t> dimensions;
 
@@ -69,11 +73,28 @@ public:
 
 
   std::tuple<size_t, size_t> size() const { return dimensions; }
+
+  template <class indexer1, class indexer2>
+  auto operator()(indexer1 ind1, indexer2 ind2)
+  {
+    return make_submatrix(*this, ind1, ind2);
+  }
+  template <class indexer1, class indexer2>
+  auto operator()(indexer1 ind1, indexer2 ind2) const
+  {
+    return make_const_submatrix(*this, ind1, ind2);
+  }
 };
 
 template <typename T> matrix<T> zeros(size_t rows, size_t columns)
 {
   return matrix<T>({rows, columns}, 0);
+}
+template <typename T> matrix<T> eye(size_t n)
+{
+  auto a = zeros<double>(n, n);
+  for (size_t i = 0; i < n; ++i) a(i, i) = 1;
+  return a;
 }
 
 template <typename T>
@@ -86,7 +107,9 @@ std::ostream& operator<<(std::ostream& cout, const matrix<T>& m)
 
   cout << rows << " X " << columns << "\n";
   for (size_t i = 0; i < rows; ++i) {
+    cout << "|\t";
     for (size_t j = 0; j < columns; ++j) cout << m(i, j) << "\t";
+    cout << "|";
     cout << std::endl;
   }
   return cout;

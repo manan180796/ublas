@@ -24,11 +24,6 @@ public:
   }
   T operator()(std::size_t i, std::size_t j) const { return op(opand, i, j); }
 
-  T operator[](std::size_t i) const
-  {
-    auto [rows, columns] = size();
-    return op(opand, i / rows, i % columns);
-  }
   matrix<T> eval() const
   {
     auto dimensions = size();

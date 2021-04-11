@@ -41,6 +41,11 @@ public:
     auto [rows, columns] = exp.size();
     return {columns, rows};
   }
+  template <class internal_indexer1, class internal_indexer2>
+  auto operator()(internal_indexer1 ind1, internal_indexer2 ind2) const
+  {
+    return make_const_submatrix(*this, ind1, ind2);
+  }
 };
 
 
